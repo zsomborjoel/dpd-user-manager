@@ -16,7 +16,7 @@ const UserTablePage: FC = () => {
 
     useEffect(() => {
         UserService.getAll().then(setUsers);
-        setChangedUsers([]);
+        setChangedUsers([]); // TODO handle user changes in table
     }, []);
 
     const saveUser = (): Promise<void> =>
