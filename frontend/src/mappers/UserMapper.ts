@@ -27,8 +27,8 @@ const modelToDto = (model: User): UserDTO => ({
     socialSecurityNumber: model.socialSecurityNumber,
     dateOfBirth: model.dateOfBirth,
     placeOfBirth: model.placeOfBirth,
-    addresses: AddressMapper.modelsToDtoArray(model.addresses),
-    phones: PhoneMapper.modelsToDtoArray(model.phones),
+    addresses: AddressMapper.modelsToDtoArray(model.addresses ?? []),
+    phones: PhoneMapper.modelsToDtoArray(model.phones ?? []),
 });
 
 const dtosToModelArray = (dtos: UserDTO[]): User[] => dtos.map(dtoToModel);
