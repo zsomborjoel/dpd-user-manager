@@ -1,4 +1,4 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
+/* eslint-disable no-param-reassign */
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Box } from '@mui/system';
 import { FC, useContext, useEffect, useState } from 'react';
@@ -16,13 +16,33 @@ const UserTablePage: FC = () => {
 
     useEffect(() => {
         UserService.getAll().then(setUsers);
-        setChangedUsers([]); // TODO handle user changes in table
     }, []);
 
-    const saveUser = (): Promise<void> =>
+    const handleRowEditCommit = (params: any): void => {
+        const { id, row, field, value } = params;
+        row[field] = value;
+
+        setChangedUsers((previous) => {
+            const found = previous.findIndex((u) => u.id === id);
+
+            if (found !== -1) {
+                previous[found] = row;
+                return previous;
+            }
+
+            return [...previous, row];
+        });
+    };
+
+    const reset = (): void => {
+        setChangedUsers([]);
+    };
+
+    const saveUsers = (): Promise<void> =>
         UserService.saveAll(changedUsers)
             .then(() => showSnackbar({ severity: 'success', text: 'Sikeresen mentve!' }))
-            .catch(() => showSnackbar({ severity: 'error', text: 'Hiba történt!' }));
+            .catch(() => showSnackbar({ severity: 'error', text: 'Hiba történt!' }))
+            .finally(reset);
 
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', width: 250 },
@@ -86,11 +106,11 @@ const UserTablePage: FC = () => {
                 pageSize={50}
                 rowsPerPageOptions={[50]}
                 disableSelectionOnClick
-                experimentalFeatures={{ newEditingApi: true }}
+                onCellEditCommit={handleRowEditCommit}
             />
             <Grid container spacing={1}>
                 <Grid item xs={6} display="flex" sx={{ m: 2 }}>
-                    <Button sx={{ width: 140 }} variant="contained" onClick={saveUser}>
+                    <Button sx={{ width: 140 }} variant="contained" onClick={saveUsers}>
                         Mentés
                     </Button>
                 </Grid>
