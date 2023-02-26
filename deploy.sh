@@ -13,8 +13,12 @@ docker run -d -p 3000:80 --name dpd-frontend dpd-frontend
 
 echo 'Frontend started...'
 
+cd /backend
+
+gradle bootJar
+
 # Backend (+ PostgreSql)
 # Start Docker container based on Docker Compose file
-docker-compose -f /backend/docker-compose.yml up -d
+docker-compose -f /docker-compose.yml up -d
 
 echo 'Backend started...'

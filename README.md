@@ -15,6 +15,11 @@ docker build -t dpd-frontend ./frontend --build-arg CICD_RUN_TAG=dpd1 --build-ar
 docker run -d -p 3000:80 --name dpd-frontend dpd-frontend
 ```
 
+#### build backend with gradle on backend directory
+```
+gradle bootJar
+```
+
 #### docker compose backend
 ```
 docker-compose -f ./backend/docker-compose.yml up -d
